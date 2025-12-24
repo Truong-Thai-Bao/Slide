@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Simple V5 - 25 Slides</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+/* --- CORE STYLES --- */
+* { box-sizing: border-box; }
+body {
+    background-color: #f0fdf4;
+    margin: 0; padding: 0;
+    font-family: 'Nunito', sans-serif;
+    height: 100vh; width: 100vw;
+    overflow: hidden;
+    display: flex; justify-content: center; align-items: center;
+}
+.slide-container {
+    background-color: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-direction: column;
+    height: 720px;
+    justify-content: center;
+    overflow: hidden; 
+    padding: 30px 50px; /* Adjusted padding for more content */
+    position: relative;
+    width: 1280px;
+    max-width: 95vw; max-height: 95vh;
+}
+.slide-container.active { display: flex; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.slide-number { position: absolute; top: 20px; right: 30px; font-weight: 800; color: #cbd5e1; font-size: 20px; z-index: 10; }
+
+/* Backgrounds */
+.slide-container::before { content: ''; position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: #dcfd8b; border-radius: 50%; z-index: 0; opacity: 0.5; filter: blur(40px); }
+.slide-container::after { content: ''; position: absolute; bottom: -50px; left: -50px; width: 400px; height: 400px; background: #fdd5bd; border-radius: 50%; z-index: 0; opacity: 0.5; filter: blur(40px); }
+.slide-container > * { position: relative; z-index: 1; }
+
+/* Typography */
+h1, h2, h3 { font-family: 'Comfortaa', cursive; color: #1e293b; }
+h1 { font-size: 55px; margin: 0; }
+.vn-sub { font-size: 18px; color: #64748b; font-style: italic; margin-top: 5px; display: block; }
+h2.slide-title { font-size: 36px; width: 100%; margin-bottom: 20px; color: #334155; border-left: 8px solid #bc84ee; padding-left: 15px; }
+p, li { font-size: 22px; color: #475569; line-height: 1.5; }
+
+/* Layouts */
+.content-area { display: flex; flex-direction: column; justify-content: center; width: 100%; flex-grow: 1; }
+.two-column { display: flex; gap: 40px; width: 100%; height: 100%; align-items: center; }
+.two-column > div { flex: 1; }
+.tiled-content { display: flex; gap: 20px; width: 100%; }
+.tile { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 20px; flex: 1; text-align: center; }
+.tile .icon { font-size: 35px; color: #bc84ee; margin-bottom: 10px; }
+
+/* Images */
+.image-wrapper { border-radius: 20px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.1); height: 300px; display: flex; justify-content: center; align-items: center; background: #fff; }
+.image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Special Boxes */
+.danger-box { background: #fef2f2; border: 2px dashed #ef4444; padding: 15px; border-radius: 10px; margin-top: 15px; }
+.safe-box { background: #f0fdf4; border: 2px solid #22c55e; padding: 15px; border-radius: 10px; margin-top: 15px; }
+.table-pronunciation { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.table-pronunciation td, .table-pronunciation th { border: 1px solid #cbd5e1; padding: 12px; text-align: center; font-size: 20px; }
+.table-pronunciation th { background: #e0f2fe; color: #0369a1; }
+
+/* QUIZ STYLES */
+.quiz-container { display: flex; flex-direction: column; gap: 10px; }
+.quiz-option { 
+    background: #fff; border: 2px solid #cbd5e1; padding: 12px 20px; 
+    border-radius: 12px; cursor: pointer; transition: all 0.2s ease; 
+    font-size: 20px; display: flex; justify-content: space-between; align-items: center;
+}
+.quiz-option:hover { border-color: #bc84ee; background: #fdf4ff; }
+.quiz-option.correct { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #15803d !important; font-weight: bold; }
+.quiz-option.wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; opacity: 0.6; }
+.explanation-box {
+    margin-top: 10px; padding: 10px; border-radius: 10px;
+    background: #fffbeb; border: 2px solid #fcd34d;
+    color: #92400e; font-size: 18px; display: none;
+    animation: fadeIn 0.3s;
+}
+
+/* Controls */
+.controls { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 15px; z-index: 100; }
+.control-btn { background: #bc84ee; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; transition: all 0.3s ease; }
+.control-btn:hover { background: #a760e6; transform: translateY(-3px); }
+.progress-bar { position: fixed; bottom: 0; left: 0; height: 6px; background: #bc84ee; width: 0%; transition: width 0.3s ease; z-index: 100; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Intro -->
+<div class="slide-container active">
+    <div class="slide-number">1/25</div>
+    <div style="text-align: center;">
+        <h1>Welcome Back!</h1>
+        <p>English Foundation Series</p>
+        <div style="margin-top: 30px; font-size: 50px; font-weight: bold; color: #bc84ee; font-family: 'Comfortaa';">
+            Present Simple Mastery
+        </div>
+        <p style="font-size: 28px; margin-top: 20px; color: #64748b;">(Thì Hiện Tại Đơn Toàn Tập)</p>
+        <div style="margin-top: 30px;">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 50px; color: #3b82f6;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 2: Ice Breaker -->
+<div class="slide-container">
+    <div class="slide-number">2/25</div>
+    <h2 class="slide-title">Warm Up: What do you do every day?</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <i class="fa-solid fa-bed" style="font-size:40px; color:#64748b;"></i>
+                <p>Wake up</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-mug-hot" style="font-size:40px; color:#78350f;"></i>
+                <p>Drink coffee</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-briefcase" style="font-size:40px; color:#3b82f6;"></i>
+                <p>Work</p>
+            </div>
+            <div class="tile">
+                <i class="fa-solid fa-gamepad" style="font-size:40px; color:#a855f7;"></i>
+                <p>Play</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 30px;">In English, to talk about these, we use <strong>Present Simple</strong>.</p>
+    </div>
+</div>
+
+<!-- SLIDE 3: Overview 3 Usages -->
+<div class="slide-container">
+    <div class="slide-number">3/25</div>
+    <h2 class="slide-title">3 Situations (3 Trường hợp dùng)</h2>
+    <div class="content-area">
+        <ul style="list-style: none; padding: 0;">
+            <li style="background: #f0fdf4; padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; background: #22c55e; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</div>
+                <div><strong>Habits (Thói quen):</strong> I wake up at 7.<i>(Tôi dậy lúc 7)</i></div>
+            </li>
+            <li style="background: #eff6ff; padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; background: #3b82f6; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</div>
+                <div><strong>Facts (Sự thật):</strong> The sun is hot.<i>(Mặt trời thì nóng)</i></div>
+            </li>
+            <li style="background: #fff7ed; padding: 15px; margin-bottom: 15px; border-radius: 10px; display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; background: #f97316; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</div>
+                <div><strong>Feelings (Cảm xúc):</strong> I like pizza.<i>(Tôi thích pizza)</i></div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- SLIDE 4: Detail Habit -->
+<div class="slide-container">
+    <div class="slide-number">4/25</div>
+    <h2 class="slide-title">1. Habits (Thói quen)</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <p>Use for repeated actions.</p>
+                <p class="vn-sub">(Hành động lặp đi lặp lại)</p>
+                <ul style="margin-top: 20px;">
+                    <li>I <strong>brush</strong> my teeth twice a day.<i>(Tôi đánh răng hai lần mỗi ngày)</i></li>
+                    <li>She <strong>goes</strong> to school by bus.<i>(Cô ấy đi học bằng xe buýt)</i></li>
+                    <li>They <strong>play</strong> football on Sundays.<i>(Họ chơi bóng đá vào ngày chủ nhật)</i></li>
+                </ul>
+            </div>
+            <div class="image-wrapper"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Routine"></div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: Detail Fact -->
+<div class="slide-container">
+    <div class="slide-number">5/25</div>
+    <h2 class="slide-title">2. Facts (Sự thật hiển nhiên)</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="image-wrapper"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Earth"></div>
+            <div>
+                <p>Things that are always true.</p>
+                <ul style="margin-top: 20px;">
+                    <li>Fire <strong>is</strong> hot.<i>(Lửa thì nóng)</i></li>
+                    <li>Water <strong>boils</strong> at 100 degrees.<i>(Nước sôi ở 100 độ)</i></li>
+                    <li>I <strong>am</strong> a teacher.<i>(Tôi là giáo viên)</i></li>
+                    <li>Birds <strong>fly</strong>.<i>(Chim bay)</i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Detail Feelings -->
+<div class="slide-container">
+    <div class="slide-number">6/25</div>
+    <h2 class="slide-title">3. Feelings & States (Cảm xúc)</h2>
+    <div class="content-area">
+        <div style="text-align: center;">
+            <p><strong>Stative Verbs:</strong> Love, Like, Hate, Know, Understand, Need, Want.</p>
+            <p class="vn-sub">(Động từ chỉ trạng thái -> KHÔNG dùng V-ing)</p>
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="danger-box">
+                    <h3><i class="fa-solid fa-xmark"></i> Wrong</h3>
+                    <p>I am liking you.<i>(Tôi đang thích bạn)</i></p>
+                    <p>She is knowing him.<i>(Cô ấy đang biết anh ấy)</i></p>
+                </div>
+                <div class="safe-box">
+                    <h3><i class="fa-solid fa-check"></i> Right</h3>
+                    <p>I <strong>like</strong> you.<i>(Tôi thích bạn)</i></p>
+                    <p>She <strong>knows</strong> him.<i>(Cô ấy biết anh ấy)</i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: TO BE -->
+<div class="slide-container">
+    <div class="slide-number">7/25</div>
+    <h2 class="slide-title">Part 1: The Verb "TO BE"</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <p><strong>To Be</strong> = Thì, Là, Ở</p>
+                <ul style="margin-top: 20px; font-size: 24px;">
+                    <li>I &rarr; <strong>Am</strong></li>
+                    <li>He, She, It &rarr; <strong>Is</strong></li>
+                    <li>You, We, They &rarr; <strong>Are</strong></li>
+                </ul>
+            </div>
+            <div style="background: #eef2ff; padding: 20px; border-radius: 15px;">
+                <p>Ex: I <strong>am</strong> happy.<i>(Tôi cảm thấy hạnh phúc)</i></p>
+                <p>Ex: She <strong>is</strong> a doctor.<i>(Cô ấy là bác sĩ)</i></p>
+                <p>Ex: They <strong>are</strong> at home.<i>(Họ đang ở nhà)</i></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: BE vs DO (Crucial) -->
+<div class="slide-container">
+    <div class="slide-number">8/25</div>
+    <h2 class="slide-title">WARNING: Be vs. Action <span class="vn-sub">(Cảnh báo quan trọng!)</span></h2>
+    <div class="content-area">
+        <p style="text-align: center;">Do not mix <strong>TO BE</strong> with <strong>ACTION VERBS</strong>.</p>
+        <p class="vn-sub" style="text-align: center;">(Đừng trộn lẫn To Be và Động từ thường)</p>
+        
+        <div class="two-column" style="margin-top: 20px;">
+            <div class="danger-box">
+                <h3><i class="fa-solid fa-skull"></i> Wrong</h3>
+                <p>I <span style="text-decoration: underline; color:red;">am</span> go to school.</p>
+                <p>She <span style="text-decoration: underline; color:red;">is</span> play football.</p>
+            </div>
+            <div class="safe-box">
+                <h3><i class="fa-solid fa-shield-halved"></i> Right</h3>
+                <p>I <strong>go</strong> to school.</p>
+                <p>She <strong>plays</strong> football.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9: Structure Group 1 -->
+<div class="slide-container">
+    <div class="slide-number">9/25</div>
+    <h2 class="slide-title">Part 2: Action Verbs (+)</h2>
+    <div class="content-area">
+        <div class="tile" style="background-color: #eff6ff; border-color: #bfdbfe; padding: 40px;">
+            <div class="icon"><i class="fa-solid fa-users"></i></div>
+            <h3>Group 1: The Easy Group</h3>
+            <p style="font-size: 30px; font-weight: bold;">I, You, We, They</p>
+            <p style="margin-top: 20px;">&rarr; <strong>Verb (Original)</strong></p>
+            <p class="vn-sub">(Giữ nguyên động từ)</p>
+            <hr>
+            <p style="font-size: 26px;">"They <strong>work</strong> hard."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: Structure Group 2 -->
+<div class="slide-container">
+    <div class="slide-number">10/25</div>
+    <h2 class="slide-title">Part 2: Action Verbs (+)</h2>
+    <div class="content-area">
+        <div class="tile" style="background-color: #fef2f2; border-color: #fecaca; padding: 40px;">
+            <div class="icon"><i class="fa-solid fa-user"></i></div>
+            <h3>Group 2: The Lonely Group</h3>
+            <p style="font-size: 30px; font-weight: bold;">He, She, It</p>
+            <p style="margin-top: 20px;">&rarr; <strong>Verb + S / ES</strong></p>
+            <p class="vn-sub">(Phải thêm S hoặc ES)</p>
+            <hr>
+            <p style="font-size: 26px;">"She <strong>works</strong> hard."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: Superman S -->
+<div class="slide-container">
+    <div class="slide-number">11/25</div>
+    <h2 class="slide-title">The "Superman S" Rule</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div style="text-align: center;">
+                 <div style="font-size: 150px; font-weight: 800; color: #ef4444; font-family: 'Comfortaa';">S</div>
+                 <p style="font-weight: bold; color: #ef4444;">He, She, It... LOVES the S!</p>
+            </div>
+            <div>
+                <p>One person = One S.</p>
+                <div class="safe-box">
+                    <p>He play<strong>s</strong></p>
+                    <p>My Mom cook<strong>s</strong></p>
+                    <p>The dog sleep<strong>s</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Spelling ES -->
+<div class="slide-container">
+    <div class="slide-number">12/25</div>
+    <h2 class="slide-title">Spelling Rule 1: Add ES</h2>
+    <div class="content-area">
+        <p>Add <strong>-ES</strong> if verb ends in: <strong>O, S, X, Z, CH, SH</strong></p>
+        <p class="vn-sub">(Mẹo nhớ: Ông Sáu Xuống Zườn Chơi Sh)</p>
+        <div class="tiled-content" style="margin-top: 30px;">
+            <div class="tile">
+                <h3>Go</h3>
+                <p style="color:#ef4444; font-weight:bold;">Goes</p>
+            </div>
+            <div class="tile">
+                <h3>Watch</h3>
+                <p style="color:#ef4444; font-weight:bold;">Watches</p>
+            </div>
+            <div class="tile">
+                <h3>Wash</h3>
+                <p style="color:#ef4444; font-weight:bold;">Washes</p>
+            </div>
+            <div class="tile">
+                <h3>Fix</h3>
+                <p style="color:#ef4444; font-weight:bold;">Fixes</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13: Spelling Y -->
+<div class="slide-container">
+    <div class="slide-number">13/25</div>
+    <h2 class="slide-title">Spelling Rule 2: The "Y"</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h3>Consonant + Y</h3>
+                <p>Study, Fly, Cry</p>
+                <p class="vn-sub">(Phụ âm + Y &rarr; Đổi thành IES)</p>
+                <div class="safe-box">
+                    <p>Study &rarr; Stud<strong>ies</strong></p>
+                    <p>Fly &rarr; Fl<strong>ies</strong></p>
+                </div>
+            </div>
+            <div>
+                <h3>Vowel (u,e,o,a,i) + Y</h3>
+                <p>Play, Buy, Say</p>
+                <p class="vn-sub">(Nguyên âm + Y &rarr; Giữ nguyên thêm S)</p>
+                <div class="safe-box">
+                    <p>Play &rarr; Play<strong>s</strong></p>
+                    <p>Buy &rarr; Buy<strong>s</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14: Pronunciation 1 -->
+<div class="slide-container">
+    <div class="slide-number">14/25</div>
+    <h2 class="slide-title">Pronunciation (Phát âm đuôi)</h2>
+    <div class="content-area">
+        <p>How do we say the "S"?</p>
+        <table class="table-pronunciation">
+            <tr>
+                <th style="background:#e0e7ff;">/s/</th>
+                <th style="background:#dcfce7;">/z/</th>
+                <th style="background:#ffedd5;">/iz/</th>
+            </tr>
+            <tr>
+                <td>Sounds: p, k, t, f</td>
+                <td>Other sounds (b, d, g, l, m, n...)</td>
+                <td>Hissing (s, z, ch, sh)</td>
+            </tr>
+            <tr>
+                <td>Stops<br>Books<br>Laughs</td>
+                <td>Play<strong>s</strong><br>Goes<br>Loves</td>
+                <td>Watch<strong>es</strong><br>Wash<strong>es</strong><br>Kiss<strong>es</strong></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 15: Pronunciation Practice -->
+<div class="slide-container">
+    <div class="slide-number">15/25</div>
+    <h2 class="slide-title">Let's Read Together!</h2>
+    <div class="content-area">
+        <div style="text-align: center; font-size: 30px;">
+            <p style="margin-bottom: 20px;">1. She <strong style="color:#ef4444;">likes</strong> books. <span style="color:#64748b; font-size: 20px;">(/s/)</span></p>
+            <p style="margin-bottom: 20px;">2. He <strong style="color:#ef4444;">plays</strong> games. <span style="color:#64748b; font-size: 20px;">(/z/)</span></p>
+            <p style="margin-bottom: 20px;">3. My mom <strong style="color:#ef4444;">washes</strong> clothes. <span style="color:#64748b; font-size: 20px;">(/iz/)</span></p>
+            <p style="margin-bottom: 20px;">4. It <strong style="color:#ef4444;">rains</strong> a lot. <span style="color:#64748b; font-size: 20px;">(/z/)</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16: Negative -->
+<div class="slide-container">
+    <div class="slide-number">16/25</div>
+    <h2 class="slide-title">Negative Form (-)</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div style="text-align: center;">
+                <h3 style="color: #3b82f6; font-size: 40px;">DON'T</h3>
+                <p>I / You / We / They</p>
+                <p>"I <strong>don't</strong> like fish."</p>
+            </div>
+            <div style="text-align: center; border-left: 2px dashed #cbd5e1;">
+                <h3 style="color: #ef4444; font-size: 40px;">DOESN'T</h3>
+                <p>He / She / It</p>
+                <p>"She <strong>doesn't</strong> like fish."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17: Negative Warning -->
+<div class="slide-container">
+    <div class="slide-number">17/25</div>
+    <h2 class="slide-title">Important Note! <span class="vn-sub">(Lưu ý quan trọng)</span></h2>
+    <div class="content-area">
+        <div style="text-align: center;">
+            <p style="font-size: 28px;">When you use <strong>DOESN'T</strong>, the verb has <strong>NO 'S'</strong>.</p>
+            <p class="vn-sub">(Khi đã dùng Doesn't, động từ KHÔNG thêm S nữa)</p>
+            
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="danger-box">
+                    <h3><i class="fa-solid fa-xmark"></i> Wrong</h3>
+                    <p>She doesn't <span style="text-decoration: underline; color: red;">likes</span> tea.</p>
+                </div>
+                <div class="safe-box">
+                    <h3><i class="fa-solid fa-check"></i> Right</h3>
+                    <p>She doesn't <strong>like</strong> tea.</p>
+                </div>
+            </div>
+            <p style="margin-top: 20px; color: #bc84ee;">(Because the Superman S moved to Doe<strong>s</strong>n't)</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18: Yes/No Questions -->
+<div class="slide-container">
+    <div class="slide-number">18/25</div>
+    <h2 class="slide-title">Yes / No Questions (?)</h2>
+    <div class="content-area">
+        <div class="tile" style="text-align: left; padding-left: 50px;">
+            <p><strong style="color:#3b82f6;">Do</strong> + I/You/We/They + Verb?</p>
+            <p>&rarr; Yes, I do. / No, I don't.</p>
+            <br>
+            <p><strong style="color:#ef4444;">Does</strong> + He/She/It + Verb?</p>
+            <p>&rarr; Yes, she does. / No, she doesn't.</p>
+        </div>
+        <p style="text-align: center; margin-top: 20px; color: #ef4444;">(Never use ARE with verbs! "Are you go?" is wrong.)</p>
+    </div>
+</div>
+
+<!-- SLIDE 19: Wh- Questions -->
+<div class="slide-container">
+    <div class="slide-number">19/25</div>
+    <h2 class="slide-title">Wh- Questions (Câu hỏi có từ để hỏi)</h2>
+    <div class="content-area">
+        <p style="text-align: center; font-weight: bold; margin-bottom: 30px;">(Wh-) + Do/Does + Subject + Verb?</p>
+        
+        <div class="tiled-content">
+            <div class="tile">
+                <h3>Where</h3>
+                <p>Where <strong>do</strong> you live?<i>(Bạn sống ở đâu?)</i></p>
+            </div>
+            <div class="tile">
+                <h3>What</h3>
+                <p>What <strong>does</strong> she eat?<i>(Cô ấy ăn gì?)</i></p>
+            </div>
+            <div class="tile">
+                <h3>When</h3>
+                <p>When <strong>do</strong> they sleep?<i>(Họ ngủ khi nào?)</i></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 20: Adverbs -->
+<div class="slide-container">
+    <div class="slide-number">20/25</div>
+    <h2 class="slide-title">Signal Words (Dấu hiệu)</h2>
+    <div class="content-area">
+        <p style="text-align: center;">Always - Usually - Often - Sometimes - Never</p>
+        <div class="safe-box" style="text-align: center; margin-top: 30px;">
+            <h3>Position (Vị trí)</h3>
+            <p>1. Before Action Verb: I <strong>always</strong> run.<i>(Tôi luôn chạy)</i></p>
+            <p>2. After To Be: I am <strong>always</strong> happy.<i>(Tôi luôn vui vẻ)</i></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 21: Quiz 1 -->
+<div class="slide-container">
+    <div class="slide-number">21/25</div>
+    <h2 class="slide-title">Quiz 1: Be or Do?</h2>
+    <div class="content-area">
+        <p>______ you a student?</p>
+        <div class="quiz-container">
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'Đúng! Student là danh từ, dùng Are.')">A. Are</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! Do chỉ đi với động từ thường.')">B. Do</div>
+        </div>
+        <p style="margin-top: 20px;">______ you play football?</p>
+        <div class="quiz-container">
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! Play là động từ, không dùng Are.')">A. Are</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'Đúng! Play là động từ, dùng Do.')">B. Do</div>
+        </div>
+        <div class="explanation-box"></div>
+    </div>
+</div>
+
+<!-- SLIDE 22: Quiz 2 -->
+<div class="slide-container">
+    <div class="slide-number">22/25</div>
+    <h2 class="slide-title">Quiz 2: Superman S</h2>
+    <div class="content-area">
+        <p>My teacher ______ English very well.</p>
+        <div class="quiz-container">
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! Teacher là 1 người (He/She) cần S.')">A. speak</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'Chính xác! Thêm S vì chủ ngữ số ít.')">B. speaks</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! Speaking cần to be (is speaking).')">C. speaking</div>
+        </div>
+        <div class="explanation-box"></div>
+    </div>
+</div>
+
+<!-- SLIDE 23: Quiz 3 -->
+<div class="slide-container">
+    <div class="slide-number">23/25</div>
+    <h2 class="slide-title">Quiz 3: Spelling & Pronunciation</h2>
+    <div class="content-area">
+        <p>He ______ TV every night.</p>
+        <div class="quiz-container">
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai chính tả! CH phải thêm ES.')">A. watchs</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'Đúng! Tận cùng CH thêm ES. Đọc là /iz/.')">B. watches</div>
+        </div>
+        <div class="explanation-box"></div>
+    </div>
+</div>
+
+<!-- SLIDE 24: Quiz 4 -->
+<div class="slide-container">
+    <div class="slide-number">24/25</div>
+    <h2 class="slide-title">Quiz 4: Wh- Question</h2>
+    <div class="content-area">
+        <p>Where ______ she work?</p>
+        <div class="quiz-container">
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! She phải đi với Does.')">A. do</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'Chính xác! Where + Does + She + Work?')">B. does</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'Sai! Is không đi với động từ Work.')">C. is</div>
+        </div>
+        <div class="explanation-box"></div>
+    </div>
+</div>
+
+<!-- SLIDE 25: Homework -->
+<div class="slide-container">
+    <div class="slide-number">25/25</div>
+    <div class="title-layout" style="text-align: center;">
+        <h1>Challenge!</h1>
+        <p>Homework for today</p>
+        <div style="text-align: left; display: inline-block; background: #fff; padding: 30px; border-radius: 20px; margin-top: 20px;">
+            <p>1. Record a video introducing yourself (Name, Age, Job, Hobbies).</p>
+            <p class="vn-sub">(Quay video giới thiệu bản thân)</p>
+            <br>
+            <p>2. Write 5 things your mom/dad does every day.</p>
+            <p class="vn-sub">(Viết 5 điều bố/mẹ làm mỗi ngày - Chú ý 'S')</p>
+        </div>
+        <p style="margin-top: 30px; font-weight: bold; color: #bc84ee;">See you next lesson!</p>
+    </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="control-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="control-btn" onclick="nextSlide()"><i class="fa-solid fa-arrow-right"></i></button>
+</div>
+<div class="progress-bar" id="progressBar"></div>
+
+<script>
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slide-container');
+    const progressBar = document.getElementById('progressBar');
+
+    function showSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slides.length) index = slides.length - 1;
+        currentSlideIndex = index;
+        slides.forEach(slide => { slide.classList.remove('active'); slide.style.display = 'none'; });
+        slides[currentSlideIndex].style.display = 'flex';
+        setTimeout(() => { slides[currentSlideIndex].classList.add('active'); }, 10);
+        progressBar.style.width = ((currentSlideIndex + 1) / slides.length) * 100 + '%';
+    }
+    function nextSlide() { showSlide(currentSlideIndex + 1); }
+    function prevSlide() { showSlide(currentSlideIndex - 1); }
+    document.addEventListener('keydown', function(event) { if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'Enter') nextSlide(); else if (event.key === 'ArrowLeft') prevSlide(); });
+    showSlide(0);
+
+    function checkAnswer(element, isCorrect, explanationText) {
+        let slide = element.closest('.slide-container');
+        // Only reset options in the same quiz container (for slides with multiple questions)
+        let parent = element.closest('.quiz-container'); 
+        let options = parent.querySelectorAll('.quiz-option');
+        
+        options.forEach(opt => opt.classList.remove('correct', 'wrong'));
+        
+        if(isCorrect) { element.classList.add('correct'); } else { element.classList.add('wrong'); }
+
+        // Find explanation box in this slide (handle multiple questions scenario if needed, currently simple)
+        let explanationBox = slide.querySelector('.explanation-box');
+        if(explanationBox) {
+            explanationBox.innerHTML = explanationText;
+            explanationBox.style.display = 'block';
+            if (isCorrect) {
+                explanationBox.style.borderColor = '#22c55e'; explanationBox.style.background = '#dcfce7'; explanationBox.style.color = '#14532d';
+            } else {
+                explanationBox.style.borderColor = '#ef4444'; explanationBox.style.background = '#fee2e2'; explanationBox.style.color = '#7f1d1d';
+            }
+        }
+    }
+</script>
+</body>
+</html>
